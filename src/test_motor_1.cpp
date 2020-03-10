@@ -1,40 +1,38 @@
-// #include <Arduino.h>
+#include <Arduino.h>
 
-// const int pinMotorLeft1 = D1;
-// const int pinMotorLeft2 = D2;
-// const int speedInit = PWMRANGE;
-// const int speed = 250;
+const int pinMotorLeft1 = D5;
+const int pinMotorLeft2 = D6;
+const int delayInit = 5;
+const int speedInit = PWMRANGE;
+const int speed = 300;
 
-// int freq = 30000;
+void setup()
+{
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, true);
 
-// void setup()
-// {
-//   pinMode(LED_BUILTIN, OUTPUT);
-//   digitalWrite(LED_BUILTIN, true);
+  pinMode(pinMotorLeft1, OUTPUT);
+  pinMode(pinMotorLeft2, OUTPUT);
+  digitalWrite(pinMotorLeft1, false);
+  digitalWrite(pinMotorLeft2, false);
+}
 
-//   pinMode(pinMotorLeft1, OUTPUT);
-//   pinMode(pinMotorLeft2, OUTPUT);
-// }
+void loop()
+{
+  delay(3000);
 
-// void loop()
-// {
-//   delay(3000);
+  analogWrite(pinMotorLeft1, speedInit);
+  delay(delayInit);
+  analogWrite(pinMotorLeft1, speed);
+  digitalWrite(pinMotorLeft2, false);
+  delay(1000);
 
-//   analogWrite(pinMotorLeft1, speedInit);
-//   delay(5);
-//   analogWrite(pinMotorLeft1, speed);
-//   digitalWrite(pinMotorLeft2, false);
-//   delay(1000);
+  analogWrite(pinMotorLeft2, speedInit);
+  delay(delayInit);
+  digitalWrite(pinMotorLeft1, false);
+  analogWrite(pinMotorLeft2, speed);
+  delay(1000);
 
-//   analogWrite(pinMotorLeft2, speedInit);
-//   delay(5);
-//   digitalWrite(pinMotorLeft1, false);
-//   analogWrite(pinMotorLeft2, speed);
-//   delay(1000);
-
-//   digitalWrite(pinMotorLeft1, false);
-//   digitalWrite(pinMotorLeft2, false);
-
-//   freq /= 2;
-//   analogWriteFreq(freq);
-// }
+  digitalWrite(pinMotorLeft1, false);
+  digitalWrite(pinMotorLeft2, false);
+}
