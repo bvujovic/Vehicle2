@@ -63,7 +63,7 @@ void MotorController::ApplyPWM(PWMs pwm)
     analogWrite(pinMotorLeft2, pwm.l2);
 }
 
-void MotorController::Go(Vector v)
+void MotorController::Go(Vector v, int t, bool brake)
 {
     LogicSpeeds ls = RequestToLogicSpeed(v);
     PWMs pwm = LogicSpeedToPWM(ls);
@@ -71,9 +71,13 @@ void MotorController::Go(Vector v)
     if (v.IsZero())
     {
         Serial.println("Stop\n");
-        pwm.SetBrake();
-        ApplyPWM(pwm);
-        delay(200);
+        if (brake)
+        {
+            //T Serial.println("Koci!\n");
+            pwm.SetBrake();
+            ApplyPWM(pwm);
+            delay(200);
+        }
         pwm.SetStandby();
     }
     else
@@ -85,8 +89,8 @@ void MotorController::Go(Vector v)
 
     if (!v.IsZero())
     {
-        delay(1000);
+        delay(t);
         Vector stop;
-        Go(stop);
+        Go(stop, brake);
     }
 }

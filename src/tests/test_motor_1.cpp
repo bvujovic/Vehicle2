@@ -1,3 +1,5 @@
+//* Testiranje najosnovnije funkcionalnosti motora
+
 // #include <Arduino.h>
 
 // const int pinMotorLeft1 = D5;
