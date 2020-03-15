@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Utils.h"
 
 #include "MotorController.h"
 MotorController motors;
@@ -9,7 +10,7 @@ ESP8266WebServer server(80);
 // Akcija vozila (act)
 void HandleAction()
 {
-    // act?x=0.33&y=-0.5&t=1.5
+    // act?x=0.33&y=-0.5&t=1500
     String x = server.arg("x");
     Serial.println(x);
     String y = server.arg("y");

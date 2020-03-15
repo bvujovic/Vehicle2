@@ -55,6 +55,7 @@ PWMs MotorController::LogicSpeedToPWM(LogicSpeeds ls)
     return pwm;
 }
 
+// primena PWM signala na pinove odredjene za motor (drajver)
 void MotorController::ApplyPWM(PWMs pwm)
 {
     analogWrite(pinMotorRight1, pwm.r1);
