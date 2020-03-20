@@ -1,5 +1,7 @@
 #pragma once
 
+#include <TestArduino.h>
+
 // X i Y komponenta vektora kretanja vozila.
 struct Vector
 {

@@ -21,7 +21,6 @@ void HandleAction()
     Vector v(x.toFloat(), y.toFloat());
     motors.Go(v, t.toFloat());
 
-    // server.send(200, "application/json", "{}");
     server.send(200, "text/plain", "OK");
 }
 
@@ -40,6 +39,17 @@ void WiFiOn()
     server.begin();
     Serial.println("WiFi ON");
 }
+
+//* Rad sa signalom sa motor speed encoder-a
+// const int pinInt1 = D7;
+// int cnt1 = 0;
+// ICACHE_RAM_ATTR void handleInt1()
+// {
+//     tprintln("1: ", cnt1++);
+// }
+// kôd za setup()
+//     pinMode(pinInt1, INPUT_PULLUP);
+//     attachInterrupt(digitalPinToInterrupt(pinInt1), handleInt1, FALLING);
 
 void setup()
 {
