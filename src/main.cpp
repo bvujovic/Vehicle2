@@ -10,16 +10,13 @@ ESP8266WebServer server(80);
 // Akcija vozila (act)
 void HandleAction()
 {
-    // act?x=0.33&y=-0.5&t=1500
+    // /act?x=0&y=0.1&t=1500&f=0
     String x = server.arg("x");
-    Serial.println(x);
     String y = server.arg("y");
-    Serial.println(y);
     String t = server.arg("t");
-    Serial.println(t);
-
-    Vector v(x.toFloat(), y.toFloat());
-    motors.Go(v, t.toFloat());
+    String f = server.arg("f");
+    MotCmd *cmd = new MotCmd(x.toFloat(), y.toFloat(), t.toInt(), (MotCmdFlags)f.toInt());
+    motors.AddCmd(cmd);
 
     server.send(200, "text/plain", "OK");
 }
@@ -38,6 +35,7 @@ void WiFiOn()
     server.on("/act", HandleAction);
     server.begin();
     Serial.println("WiFi ON");
+    Utils::PrintBoardStatus();
 }
 
 //* Rad sa signalom sa motor speed encoder-a
@@ -63,5 +61,6 @@ void setup()
 void loop()
 {
     server.handleClient();
+    motors.Refresh(millis());
     delay(10);
 }

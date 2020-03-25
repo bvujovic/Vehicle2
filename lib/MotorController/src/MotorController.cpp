@@ -14,15 +14,15 @@ MotorController::MotorController()
     digitalWrite(pinMotorRight2, false);
 }
 
-// request (Vector) -> logic speed
-LogicSpeeds MotorController::RequestToLogicSpeed(Vector v)
+// request (MotCmd) -> logic speed
+LogicSpeeds MotorController::RequestToLogicSpeed(MotCmd &cmd)
 {
     LogicSpeeds ls;
     // init brzine
-    ls.r = ls.l = v.GetY();
+    ls.r = ls.l = cmd.GetY();
     // izmena brzina motora u zavisnosti od smera
-    ls.r *= 1 - v.GetX();
-    ls.l *= 1 + v.GetX();
+    ls.r *= 1 - cmd.GetX();
+    ls.l *= 1 + cmd.GetX();
 
     // normalizacija na r, l = [-1, 1]
     float absr = abs(ls.r);
@@ -64,34 +64,56 @@ void MotorController::ApplyPWM(PWMs pwm)
     analogWrite(pinMotorLeft2, pwm.l2);
 }
 
-void MotorController::Go(Vector v, int t, bool brake)
+void MotorController::Refresh(unsigned long ms)
 {
-    LogicSpeeds ls = RequestToLogicSpeed(v);
-    PWMs pwm = LogicSpeedToPWM(ls);
-
-    if (v.IsZero())
+    if (currCmd == NULL) // ako se trenutno ne izvrsava nijedna komanda
     {
-        Serial.println("Stop\n");
-        if (brake)
+        if (commands.isEmpty())
+            return;
+        else
+            StartNextCmd();
+    }
+    else // trenutno se izvrsava currCmd
+    {
+        if (ms >= currCmdStarted + currCmd->GetT()) // ako je vreme izvrsavanja tekuce komande isteklo
         {
-            //T Serial.println("Koci!\n");
-            pwm.SetBrake();
+            PWMs pwm;
+            //* ako je flag za kocenje ukljucen uraditi SetBrake umesto SetStandBy
+            pwm.SetStandby(); //* verovatno moze i bez ovog
             ApplyPWM(pwm);
-            delay(200);
+            currCmd = NULL;
+            if (!commands.isEmpty())
+                Refresh(ms); // da bi se odmah pokrenula sledeca komanda
+            else
+                Serial.println("Kraj");
         }
-        pwm.SetStandby();
     }
-    else
-    {
-        SerialDisplay::Println("LS", ls);
-        SerialDisplay::Println("PWM", pwm);
-    }
-    ApplyPWM(pwm);
+}
 
-    if (!v.IsZero())
+void MotorController::AddCmd(MotCmd *cmd)
+{
+    if (cmd->GetFlags() & MotCmdFlags::Breaking)
+        ClearCommands();
+    commands.unshift(cmd);
+}
+
+void MotorController::StartNextCmd()
+{
+    currCmd = commands.pop();
+    currCmdStarted = millis();
+    SerialDisplay::Println("curr cmd", *currCmd);
+
+    LogicSpeeds ls = RequestToLogicSpeed(*currCmd);
+    PWMs pwm = LogicSpeedToPWM(ls);
+    ApplyPWM(pwm);
+}
+
+void MotorController::ClearCommands()
+{
+    while (!commands.isEmpty())
     {
-        delay(t);
-        Vector stop;
-        Go(stop, brake);
+        MotCmd *cmd = commands.shift();
+        delete cmd;
     }
+    currCmd = NULL;
 }

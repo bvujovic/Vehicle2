@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Arduino.h"
-#include "Vector.h"
+#include "MotCmd.h"
 #include "LogicSpeeds.h"
 #include "PWMs.h"
+#include <CircularBuffer.h>
 
 // Neposredno upravljanje radom motora.
 class MotorController
@@ -18,12 +19,19 @@ private:
     const int speedMin = 200; // ispod ove PWM vrednosti motori ne rade
     //todo Trebace (verovatno posebno za L i R) vrednosti minimalnih brzina (PWM-ova).
 
+    CircularBuffer<MotCmd*, 100> commands;
+    unsigned long currCmdStarted = 0; // vreme pocetka (u ms) tekuce komande
+    MotCmd *currCmd; // komanda u izvrsavanju
+    void StartNextCmd();
+    void ClearCommands();
+
 public:
     MotorController();
 
-    LogicSpeeds RequestToLogicSpeed(Vector v);
+    LogicSpeeds RequestToLogicSpeed(MotCmd &cmd);
     PWMs LogicSpeedToPWM(LogicSpeeds ls);
     void ApplyPWM(PWMs pwm);
-    
-    void Go(Vector v, int t, bool brake = true);
+
+    void AddCmd(MotCmd *cmd);
+    void Refresh(unsigned long);
 };

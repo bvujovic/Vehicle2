@@ -24,3 +24,16 @@ void SerialDisplay::Println(String caption, PWMs pwm)
     Serial.print(", ");
     Serial.println(pwm.l2);
 }
+
+void SerialDisplay::Println(String caption, MotCmd &cmd)
+{
+    Serial.print(caption);
+    Serial.print(": ");
+    Serial.print(cmd.GetX());
+    Serial.print(", ");
+    Serial.print(cmd.GetY());
+    Serial.print(", ");
+    Serial.println(cmd.GetT());
+    // Serial.print(", ");
+    // Serial.println(cmd.GetFlags());
+}
