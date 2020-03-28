@@ -1,5 +1,4 @@
 #include "MotorController.h"
-#include "SerialDisplay.h"
 
 MotorController::MotorController()
 {
@@ -12,47 +11,6 @@ MotorController::MotorController()
     digitalWrite(pinMotorLeft2, false);
     digitalWrite(pinMotorRight1, false);
     digitalWrite(pinMotorRight2, false);
-}
-
-// request (MotCmd) -> logic speed
-LogicSpeeds MotorController::RequestToLogicSpeed(MotCmd &cmd)
-{
-    LogicSpeeds ls;
-    // init brzine
-    ls.r = ls.l = cmd.GetY();
-    // izmena brzina motora u zavisnosti od smera
-    ls.r *= 1 - cmd.GetX();
-    ls.l *= 1 + cmd.GetX();
-
-    // normalizacija na r, l = [-1, 1]
-    float absr = abs(ls.r);
-    float absl = abs(ls.l);
-    float max = _max(absr, absl);
-    if (max > 1) // normalizacija je potrebna
-    {
-        float k = 1 / max;
-        ls.r *= k;
-        ls.l *= k;
-    }
-
-    return ls;
-}
-
-// logic speed -> pwm
-PWMs MotorController::LogicSpeedToPWM(LogicSpeeds ls)
-{
-    PWMs pwm;
-    pwm.r1 = ls.r == 0 ? 0 : (speedMax - speedMin) * fabs(ls.r) + speedMin;
-    pwm.r2 = 0;
-    pwm.l1 = ls.l == 0 ? 0 : (speedMax - speedMin) * fabs(ls.l) + speedMin;
-    pwm.l2 = 0;
-
-    if (ls.r < 0)
-        pwm.ReverseR();
-    if (ls.l < 0)
-        pwm.ReverseL();
-
-    return pwm;
 }
 
 // primena PWM signala na pinove odredjene za motor (drajver)
@@ -103,7 +61,7 @@ void MotorController::StartNextCmd()
     currCmdStarted = millis();
     SerialDisplay::Println("curr cmd", *currCmd);
 
-    LogicSpeeds ls = RequestToLogicSpeed(*currCmd);
+    LogicSpeeds ls = MotCmdToLogicSpeed(*currCmd);
     PWMs pwm = LogicSpeedToPWM(ls);
     ApplyPWM(pwm);
 }

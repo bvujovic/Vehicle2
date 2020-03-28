@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Arduino.h"
+#include "ArduinoV2.h"
 #include "LogicSpeeds.h"
 #include "PWMs.h"
 #include "MotCmd.h"

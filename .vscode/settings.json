@@ -5,6 +5,7 @@
         "random": "cpp",
         "istream": "cpp",
         "limits": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "cmath": "cpp"
     }
 }

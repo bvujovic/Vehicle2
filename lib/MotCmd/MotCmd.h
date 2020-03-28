@@ -1,6 +1,6 @@
 #pragma once
 
-#include <TestArduino.h>
+#include <ArduinoV2.h>
 #include "Enums.h"
 
 // Komanda/zadatak za MotorController.
@@ -17,7 +17,7 @@ private:
 
 public:
     MotCmd();
-    MotCmd(float x, float y, int t, MotCmdFlags flags);
+    MotCmd(float x, float y, int t, MotCmdFlags flags = (MotCmdFlags)0);
 
     float GetX() { return x; }
     float GetY() { return y; }
