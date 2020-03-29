@@ -20,8 +20,8 @@ LogicSpeeds MotCtrlCore::MotCmdToLogicSpeed(MotCmd &cmd)
     ls.l *= 1 + cmd.GetX();
 
     // normalizacija na r, l = [-1, 1]
-    float absr = abs(ls.r);
-    float absl = abs(ls.l);
+    float absr = _abs(ls.r);
+    float absl = _abs(ls.l);
     float max = _max(absr, absl);
     if (max > 1) // normalizacija je potrebna
     {
@@ -37,9 +37,9 @@ LogicSpeeds MotCtrlCore::MotCmdToLogicSpeed(MotCmd &cmd)
 PWMs MotCtrlCore::LogicSpeedToPWM(LogicSpeeds ls)
 {
     PWMs pwm;
-    pwm.r1 = ls.r == 0 ? 0 : (speedMax - speedMin) * abs(ls.r) + speedMin;
+    pwm.r1 = ls.r == 0 ? 0 : (speedMax - speedMin) * _abs(ls.r) + speedMin;
     pwm.r2 = 0;
-    pwm.l1 = ls.l == 0 ? 0 : (speedMax - speedMin) * abs(ls.l) + speedMin;
+    pwm.l1 = ls.l == 0 ? 0 : (speedMax - speedMin) * _abs(ls.l) + speedMin;
     pwm.l2 = 0;
 
     if (ls.r < 0)

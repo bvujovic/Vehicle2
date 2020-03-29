@@ -34,6 +34,6 @@ void SerialDisplay::Println(String caption, MotCmd &cmd)
     Serial.print(cmd.GetY());
     Serial.print(", ");
     Serial.println(cmd.GetT());
-    // Serial.print(", ");
-    // Serial.println(cmd.GetFlags());
+    Serial.print(", ");
+    Serial.println(cmd.GetFlags());
 }

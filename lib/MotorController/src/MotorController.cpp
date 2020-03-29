@@ -16,6 +16,8 @@ MotorController::MotorController()
 // primena PWM signala na pinove odredjene za motor (drajver)
 void MotorController::ApplyPWM(PWMs pwm)
 {
+    tprintln("R pwm 1", pwm.r1);
+    tprintln("L pwm 1", pwm.l1);
     analogWrite(pinMotorRight1, pwm.r1);
     analogWrite(pinMotorRight2, pwm.r2);
     analogWrite(pinMotorLeft1, pwm.l1);
@@ -36,9 +38,16 @@ void MotorController::Refresh(unsigned long ms)
         if (ms >= currCmdStarted + currCmd->GetT()) // ako je vreme izvrsavanja tekuce komande isteklo
         {
             PWMs pwm;
-            //* ako je flag za kocenje ukljucen uraditi SetBrake umesto SetStandBy
-            pwm.SetStandby(); //* verovatno moze i bez ovog
+            if (currCmd->GetFlags() & MotCmdFlags::Brake)
+            {
+                Serial.println("brake");
+                pwm.SetBrake();
+                ApplyPWM(pwm);
+                delay(250);
+            }
+            pwm.SetStandby();
             ApplyPWM(pwm);
+
             currCmd = NULL;
             if (!commands.isEmpty())
                 Refresh(ms); // da bi se odmah pokrenula sledeca komanda
@@ -62,6 +71,17 @@ void MotorController::StartNextCmd()
     SerialDisplay::Println("curr cmd", *currCmd);
 
     LogicSpeeds ls = MotCmdToLogicSpeed(*currCmd);
+
+    // kada se motor(i) pokrece sa jako malom brzinom, 
+    // potreban mu je kratak impuls vece snage
+    if (ls.HasLowSpeed())
+    {
+        LogicSpeeds lsBurst = ls.GetBurstLS();
+        PWMs pwm = LogicSpeedToPWM(lsBurst);
+        ApplyPWM(pwm);
+        delay(delayInit);
+    }
+
     PWMs pwm = LogicSpeedToPWM(ls);
     ApplyPWM(pwm);
 }

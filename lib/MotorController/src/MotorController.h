@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ArduinoV2.h>
+#include <Utils.h>
 #include "MotCmd.h"
 #include "LogicSpeeds.h"
 #include "PWMs.h"

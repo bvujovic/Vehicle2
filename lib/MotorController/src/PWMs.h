@@ -18,6 +18,6 @@ public:
     void ReverseR() { Swap(&r1, &r2); }
     void ReverseL() { Swap(&l1, &l2); }
 
-    void SetBrake() { r1 = r2 = l1 = l2 = 500; }
+    void SetBrake() { r1 = r2 = l1 = l2 = 750; }
     void SetStandby() { r1 = r2 = l1 = l2 = 0; }
 };
