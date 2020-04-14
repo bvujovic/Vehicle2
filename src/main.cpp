@@ -1,11 +1,17 @@
+#define DEBUG true
+
 #include <Arduino.h>
-#include "Utils.h"
+#include <UtilsESP.h>
+#include <UtilsCommon.h>
 
 #include "MotorController.h"
 MotorController motors;
 
 #include <WiFiServerBasics.h>
 ESP8266WebServer server(80);
+#include <ArduinoOTA.h>
+
+bool isOtaOn = false; // da li je OTA update u toku
 
 // Akcija vozila (act)
 void HandleAction()
@@ -33,9 +39,10 @@ void WiFiOn()
     server.on("/inc/script.js", []() { HandleDataFile(server, "/inc/script.js", "text/javascript"); });
     server.on("/inc/style.css", []() { HandleDataFile(server, "/inc/style.css", "text/css"); });
     server.on("/act", HandleAction);
+    server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
     server.begin();
     Serial.println("WiFi ON");
-    Utils::PrintBoardStatus();
+    UtilsESP::PrintBoardStatus();
 }
 
 //* Rad sa signalom sa motor speed encoder-a
@@ -60,7 +67,14 @@ void setup()
 
 void loop()
 {
+    delay(10);
+
+    if (isOtaOn)
+    {
+        ArduinoOTA.handle();
+        return;
+    }
+
     server.handleClient();
     motors.Refresh(millis());
-    delay(10);
 }

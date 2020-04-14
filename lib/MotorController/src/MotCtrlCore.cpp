@@ -13,7 +13,7 @@ LogicSpeeds MotCtrlCore::MotCmdToLogicSpeed(MotCmd &cmd)
         ls.l = cmd.GetX();
         ls.r = -ls.l;
         return ls;
-    }
+    }    
 
     // izmena brzina motora u zavisnosti od smera
     ls.r *= 1 - cmd.GetX();

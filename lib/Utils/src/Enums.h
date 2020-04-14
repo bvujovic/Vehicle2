@@ -4,10 +4,11 @@
 enum MotCmdFlags
 {
     // Bataljuje sve komande koje su na redu za izvrsavanje (i tekucu) i izvrsava se umesto njih.
-    //* Mozda umesto ovog flaga dodati metod AddBreakingCmd
-    Breaking = 1,
+    Breaking = 1, //* Mozda umesto ovog flaga dodati metod AddBreakingCmd
     // Kocenje
     Brake = 2,
-    //? StandBy = 4 
+
+    //? TurnInPlace = 4 // Obrtanje vozila u mestu
+    //? StandBy
     //? Cancelled // moze da bude korisno za nekakve izvestaje da bi se znalo da li su neke komande cancel-ovane
 };

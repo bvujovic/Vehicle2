@@ -1,7 +1,7 @@
+#ifndef TESTV2
 #pragma once
 
 #include <ArduinoV2.h>
-#include <Utils.h>
 #include "MotCmd.h"
 #include "LogicSpeeds.h"
 #include "PWMs.h"
@@ -36,3 +36,5 @@ public:
     void AddCmd(MotCmd *cmd);
     void Refresh(unsigned long);
 };
+
+#endif

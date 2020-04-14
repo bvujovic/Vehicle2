@@ -1,4 +1,6 @@
 #include "MotorController.h"
+#include <UtilsCommon.h>
+#ifndef TESTV2
 
 MotorController::MotorController()
 {
@@ -16,8 +18,8 @@ MotorController::MotorController()
 // primena PWM signala na pinove odredjene za motor (drajver)
 void MotorController::ApplyPWM(PWMs pwm)
 {
-    tprintln("R pwm 1", pwm.r1);
-    tprintln("L pwm 1", pwm.l1);
+    cprintln("R pwm 1", pwm.r1);
+    cprintln("L pwm 1", pwm.l1);
     analogWrite(pinMotorRight1, pwm.r1);
     analogWrite(pinMotorRight2, pwm.r2);
     analogWrite(pinMotorLeft1, pwm.l1);
@@ -40,7 +42,6 @@ void MotorController::Refresh(unsigned long ms)
             PWMs pwm;
             if (currCmd->GetFlags() & MotCmdFlags::Brake)
             {
-                Serial.println("brake");
                 pwm.SetBrake();
                 ApplyPWM(pwm);
                 delay(250);
@@ -95,3 +96,5 @@ void MotorController::ClearCommands()
     }
     currCmd = NULL;
 }
+
+#endif

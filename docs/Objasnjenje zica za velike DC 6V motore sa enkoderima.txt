@@ -1,0 +1,18 @@
+Red Wire - positive power supply of motor(+)(change positive and negative of motor the rotation will change)
+White Wire - negative power supply of motor(-)(change positive and negative of motor the rotation will change))
+Yellow Wire - signal feedback (motor one turn has 11 signals)
+Green Wire - signal feedback (motor one turn has 11 signals)
+Blue Wire - positive of encoder power supply(+)(3.3-5V),cannot be wrong
+Black Wire - negative of encoder power supply(-)(3.3-5V),cannot be wrong
+
+Hall x Ratio 34.02 = 341.2PPR	
+
+
+2. izvor:
+
+Red → 	Motor Power + (exchange can control motor reversing)
+Black → encoder Power - (positive and negative not take the wrong 3.3-5V)
+Yellow → feedback signal   (11pulse/rpm)
+Green → feedback signal   (11pulse/rpm)
+Blue → 	encoder supply + (positive and negative not take the wrong 3.3-5V)  
+White → Motor Power - (exchange can control motor reversing)

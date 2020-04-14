@@ -4,6 +4,7 @@
 #include <CircularBuffer.h>
 #include <unity.h>
 #include <Enums.h>
+// #include <stdio.h>
 
 // void setUp(void) {}
 
@@ -77,7 +78,7 @@ void MotCtrlCore_MotCmdToLogicSpeed()
     TEST_ASSERT_EQUAL(ls.r, -0.3);
     TEST_ASSERT_EQUAL(ls.l, 0.3);
 
-    cmd = new MotCmd(-1, 0, 1000); // okretanje vozila u mestu ulevo, max brzina
+    cmd = new MotCmd(-1, 0, 1000);
     ls = mc.MotCmdToLogicSpeed(*cmd);
     TEST_ASSERT_EQUAL(ls.r, 1);
     TEST_ASSERT_EQUAL(ls.l, -1);
@@ -119,6 +120,7 @@ void circ_buffer_nondestructive()
 }
 
 #pragma endregion
+
 
 int main(int argc, char **argv)
 {

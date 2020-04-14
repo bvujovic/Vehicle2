@@ -6,6 +6,7 @@
         "istream": "cpp",
         "limits": "cpp",
         "*.tpp": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "cstdarg": "cpp"
     }
 }
