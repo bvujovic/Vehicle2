@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <UtilsESP.h>
 #include <UtilsCommon.h>
+#include <Statuses.h>
 
 #include "MotorController.h"
 MotorController motors;
@@ -14,7 +15,7 @@ ESP8266WebServer server(80);
 bool isOtaOn = false; // da li je OTA update u toku
 
 // Akcija vozila (act)
-void HandleAction()
+void ActHandler()
 {
     // /act?x=0&y=0.1&t=1500&f=0
     String x = server.arg("x");
@@ -25,6 +26,17 @@ void HandleAction()
     motors.AddCmd(cmd);
 
     server.send(200, "text/plain", "OK");
+}
+
+// Statusi sistema (statuses)
+void StatusesHandler()
+{
+    // /statuses?idLimit=123
+    String idLimit = server.arg("idLimit");
+    //B
+    // Statuses::Add(new Status("start", "main"));
+    // Statuses::Add(new Status("second"));
+    server.send(200, "text/x-csv", Statuses::GetNewStatusesText(idLimit.toInt()));
 }
 
 // Konektovanje na WiFi, uzimanje tacnog vremena, postavljanje IP adrese i startovanje veb servera.
@@ -38,7 +50,9 @@ void WiFiOn()
     server.on("/inc/vehicle.png", []() { HandleDataFile(server, "/inc/vehicle.png", "image/png"); });
     server.on("/inc/script.js", []() { HandleDataFile(server, "/inc/script.js", "text/javascript"); });
     server.on("/inc/style.css", []() { HandleDataFile(server, "/inc/style.css", "text/css"); });
-    server.on("/act", HandleAction);
+    server.on("/act", ActHandler);
+    //* server.on("/tests", VTestsHandler);
+    server.on("/statuses", StatusesHandler);
     server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
     server.begin();
     Serial.println("WiFi ON");
@@ -61,7 +75,9 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, true);
     Serial.begin(115200);
+    Serial.println();
     SPIFFS.begin();
+
     WiFiOn();
 }
 

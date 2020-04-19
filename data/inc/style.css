@@ -25,3 +25,8 @@ input[type="number"]
 {
     width: 45px;
 }
+
+a
+{
+    display: block;
+}
