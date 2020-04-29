@@ -1,5 +1,3 @@
-#define DEBUG true
-
 #include <Arduino.h>
 #include <UtilsESP.h>
 #include <UtilsCommon.h>
@@ -10,8 +8,8 @@ MotorController motors;
 
 #include <WiFiServerBasics.h>
 ESP8266WebServer server(80);
-#include <ArduinoOTA.h>
 
+#include <ArduinoOTA.h>
 bool isOtaOn = false; // da li je OTA update u toku
 
 // Akcija vozila (act)
@@ -24,6 +22,8 @@ void ActHandler()
     String f = server.arg("f");
     MotCmd *cmd = new MotCmd(x.toFloat(), y.toFloat(), t.toInt(), (MotCmdFlags)f.toInt());
     motors.AddCmd(cmd);
+    //B Statuses::Add(x + "\t" + y);
+    Statuses::Add(new Status(x + ", " + y + ", " + t, "user"));
 
     server.send(200, "text/plain", "OK");
 }
@@ -53,6 +53,9 @@ void WiFiOn()
     server.on("/act", ActHandler);
     //* server.on("/tests", VTestsHandler);
     server.on("/statuses", StatusesHandler);
+    server.on("/reps/", []() { HandleDataFile(server, "/reps/index.html", "text/html"); });
+    server.on("/reps/statuses.html", []() { HandleDataFile(server, "/reps/statuses.html", "text/html"); });
+    server.on("/inc/statuses.js", []() { HandleDataFile(server, "/inc/statuses.js", "text/javascript"); });
     server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
     server.begin();
     Serial.println("WiFi ON");

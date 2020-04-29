@@ -1,37 +1,24 @@
 #include "Statuses.h"
+#include <UtilsCommon.h>
 
-CircularBuffer<Status *, ST_CAPACITY> Statuses::statuses;
+CircularBuffer<Status *, STAT_CAPACITY> Statuses::statuses;
 
 void Statuses::Add(Status *s)
 {
+    tprintln(s->ToString());
     statuses.unshift(s);
 }
 
-//B
-// Status **Statuses::GetNewStatuses(ulong idLimit)
-// {
-//     int cnt = 0; // prebrojavanje koliko ima novih statusa (id > idLimit)
-//     for (int i = 0; i < statuses.size(); i++) // petlja ide od kraja ka pocetku spiska statusa
-//         if (statuses[i]->GetId() > idLimit)
-//             cnt++;
-//         else
-//             break;
-//     if (cnt == 0)
-//         return NULL;
-//     else
-//     {
-//         Status **res = new Status *[12];
-//         for (int i = cnt - 1; i >= 0; i--)
-//             res[i] = statuses[i];
-//         return res;
-//     }
-// }
+void Statuses::Add(String str)
+{
+    Add(new Status(str));
+}
 
-int Statuses::GetIdxStart(ulong idLimit)
+int Statuses::GetIdxStart(ulong id)
 {
     int i = 0;
     for (; i < statuses.size(); i++) // petlja ide od kraja ka pocetku spiska statusa
-        if (statuses[i]->GetId() <= idLimit)
+        if (statuses[i]->GetId() <= id)
             break;
     return i;
 }

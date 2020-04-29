@@ -17,7 +17,7 @@ h3
 
 input[type="button"]
 {
-    margin-top: 40px;
+    margin: 10px 0;
     display: block;
 }
 
@@ -29,4 +29,14 @@ input[type="number"]
 a
 {
     display: block;
+    color: green;
+}
+
+table
+{
+    margin: 30px 10px;
+}
+
+td, th {
+    padding: 5px;
 }

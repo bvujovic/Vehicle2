@@ -2,6 +2,7 @@
 
 #include <ArduinoV2.h>
 
+// Status sistema: poruka/tekst, izvor/uzrok poruke, vreme kreiranja statusa i id.
 class Status
 {
 private:
