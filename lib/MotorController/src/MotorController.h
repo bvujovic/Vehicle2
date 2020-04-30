@@ -25,16 +25,15 @@ private:
     MotCmd *currCmd; // komanda u izvrsavanju
     void StartNextCmd();
     void ClearCommands();
+    void ApplyPWM(PWMs pwm);
 
 public:
     MotorController();
 
-    // LogicSpeeds MotCmdToLogicSpeed(MotCmd &cmd);
-    // PWMs LogicSpeedToPWM(LogicSpeeds ls);
-    void ApplyPWM(PWMs pwm);
-
     void AddCmd(MotCmd *cmd);
-    void Refresh(unsigned long);
+    void Refresh();
+    int GetCommandsCount() { return commands.size(); }
+
 };
 
 #endif

@@ -8,6 +8,7 @@
         "*.tpp": "cpp",
         "cmath": "cpp",
         "cstdarg": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "sstream": "cpp"
     }
 }

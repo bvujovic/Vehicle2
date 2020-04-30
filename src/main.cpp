@@ -2,6 +2,8 @@
 #include <UtilsESP.h>
 #include <UtilsCommon.h>
 #include <Statuses.h>
+#include <VTests.h>
+#include <Sensors.h>
 
 #include "MotorController.h"
 MotorController motors;
@@ -63,12 +65,13 @@ void WiFiOn()
 }
 
 //* Rad sa signalom sa motor speed encoder-a
-// const int pinInt1 = D7;
-// int cnt1 = 0;
-// ICACHE_RAM_ATTR void handleInt1()
-// {
-//     tprintln("1: ", cnt1++);
-// }
+const int pinInt1 = D4;
+int cnt1 = 0;
+ICACHE_RAM_ATTR void handleInt1()
+{
+    // tprintln("1: ", cnt1++);
+    cnt1++;
+}
 // kôd za setup()
 //     pinMode(pinInt1, INPUT_PULLUP);
 //     attachInterrupt(digitalPinToInterrupt(pinInt1), handleInt1, FALLING);
@@ -81,19 +84,38 @@ void setup()
     Serial.println();
     SPIFFS.begin();
 
+    //* testiranje cuvanja/citanja SPIFFS podataka
+
+    //* testiranje VTest klase
+    // VTests::SetMotors(&motors);
+    // VTests::BalanceMotors(0.2);
+
+    pinMode(pinInt1, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(pinInt1), handleInt1, FALLING);
+
     WiFiOn();
 }
+
+ulong secs = 0;
 
 void loop()
 {
     delay(10);
+    Sensors::ms = millis();
 
     if (isOtaOn)
     {
         ArduinoOTA.handle();
         return;
     }
-
     server.handleClient();
-    motors.Refresh(millis());
+
+    if (Sensors::ms / 1000 > secs)
+    {
+        Statuses::Add(String("cnt 1: ") + cnt1, "motor hall sensor");
+        secs++;
+    }
+
+    // VTests::Refresh();
+    motors.Refresh();
 }

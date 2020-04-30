@@ -21,10 +21,10 @@ public:
     
     // Status id
     ulong GetId() { return id; }
-    // Time (in milliseconds) when the status was created
+    // Vreme (u milisekundama) kada je status kreiran
     ulong GetMs() { return ms; }
-    // Status message
+    // Statusna poruka
     String GetMessage() { return message; }
-    // Source (origin) of the status
+    // Izvor/poreklo statusa
     String GetSource() { return source; }
 };

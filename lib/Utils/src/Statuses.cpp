@@ -9,9 +9,9 @@ void Statuses::Add(Status *s)
     statuses.unshift(s);
 }
 
-void Statuses::Add(String str)
+void Statuses::Add(String msg, String src)
 {
-    Add(new Status(str));
+    Add(new Status(msg, src));
 }
 
 int Statuses::GetIdxStart(ulong id)

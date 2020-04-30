@@ -1,6 +1,8 @@
+#ifndef TESTV2
+
 #include "MotorController.h"
 #include <UtilsCommon.h>
-#ifndef TESTV2
+#include <Sensors.h>
 
 MotorController::MotorController()
 {
@@ -26,7 +28,7 @@ void MotorController::ApplyPWM(PWMs pwm)
     analogWrite(pinMotorLeft2, pwm.l2);
 }
 
-void MotorController::Refresh(unsigned long ms)
+void MotorController::Refresh()
 {
     if (currCmd == NULL) // ako se trenutno ne izvrsava nijedna komanda
     {
@@ -37,7 +39,7 @@ void MotorController::Refresh(unsigned long ms)
     }
     else // trenutno se izvrsava currCmd
     {
-        if (ms >= currCmdStarted + currCmd->GetT()) // ako je vreme izvrsavanja tekuce komande isteklo
+        if (Sensors::ms >= currCmdStarted + currCmd->GetT()) // ako je vreme izvrsavanja tekuce komande isteklo
         {
             PWMs pwm;
             if (currCmd->GetFlags() & MotCmdFlags::Brake)
@@ -51,7 +53,7 @@ void MotorController::Refresh(unsigned long ms)
 
             currCmd = NULL;
             if (!commands.isEmpty())
-                Refresh(ms); // da bi se odmah pokrenula sledeca komanda
+                Refresh(); // da bi se odmah pokrenula sledeca komanda
             else
                 Serial.println("Kraj");
         }

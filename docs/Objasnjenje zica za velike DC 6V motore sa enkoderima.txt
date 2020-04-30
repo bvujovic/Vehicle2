@@ -5,7 +5,8 @@ Green Wire - signal feedback (motor one turn has 11 signals)
 Blue Wire - positive of encoder power supply(+)(3.3-5V),cannot be wrong
 Black Wire - negative of encoder power supply(-)(3.3-5V),cannot be wrong
 
-Hall x Ratio 34.02 = 341.2PPR	
+Potrosnja encoder-a je 12mA
+Hall x Ratio 34.02 = 341.2PPR   
 
 
 2. izvor:

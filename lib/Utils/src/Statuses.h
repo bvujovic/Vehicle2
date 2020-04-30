@@ -17,8 +17,8 @@ private:
 public:
     // Dodavanje novog statusa u kolekciju.
     static void Add(Status *s);
-    // Dodavanje novog statusa u kolekciju pri cemu ce prosledjeni string biti poruka/tekst statusa.
-    static void Add(String str);
+    // Dodavanje novog statusa u kolekciju na osnovu prosledjenie poruke i izvora/uzroka.
+    static void Add(String msg, String src = "");
     // Metoda vraca string sastavljen od svih novih (id > idLimit) statusa.
     static String GetNewStatusesText(ulong idLimit = 0);
 
