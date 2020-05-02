@@ -29,11 +29,11 @@ String Statuses::GetNewStatusesText(ulong idLimit)
     if (idxStart == 0)
         return "";
     String res;
-    for (int i = 0; i < idxStart - 1; i++)
+    for (int i = idxStart - 1; i > 0; i--)
     {
         res.concat(statuses[i]->ToString());
         res.concat('\n');
     }
-    res.concat(statuses[idxStart - 1]->ToString());
+    res.concat(statuses[0]->ToString());
     return res;
 }

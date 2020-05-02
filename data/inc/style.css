@@ -32,11 +32,18 @@ a
     color: green;
 }
 
-table
+.data-tbl
 {
     margin: 30px 10px;
 }
 
-td, th {
+.data-tbl td, th {
     padding: 5px;
+}
+
+.head-tbl
+{
+    border: white 1px solid;
+    margin: 20px 10px;
+    padding: 10px;
 }

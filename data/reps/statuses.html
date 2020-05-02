@@ -5,25 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="inc/vehicle.png" type="image/png" />
-    <link href="/inc/style.css" rel="stylesheet" type="text/css">
-    <script src="/inc/statuses.js" type="text/javascript" language="JavaScript"></script>
+    <link href="../inc/style.css" rel="stylesheet" type="text/css">
+    <script src="../inc/statuses.js" type="text/javascript" language="JavaScript"></script>
     <title>Vehicle 2 - Statuses</title>
 </head>
 
-<body onload=''>
+<body onload='RefreshTable();'>
     <h1 id='h1'>Vehicle 2 - Statuses</h1>
 
     <p>
         <a href="/">Home</a>
         <a href="/reps/">Reports</a>
     </p>
-    <p>
-        <label for="chkAutoRefresh">Auto Refresh</label>
-        <input type="checkbox" id='chkAutoRefresh' onchange="ChkAutoRefreshChange(this.checked, numTimerSecs.value)" >
-        every <input type="number" id='numTimerSecs' value='5' min='1' max='60'> seconds
-        <input type="button" id='btnRefreshNow' value="Refresh Now" onclick="RefreshTable()">
-    </p>
-    <table id='tblStatuses' border='1'>
+    <table class="head-tbl">
+        <tr>
+            <td><label for="chkAutoRefresh">Auto Refresh:</label></td>
+            <td>
+                <input type="checkbox" id='chkAutoRefresh'
+                    onchange="ChkAutoRefreshChange(this.checked, numTimerSecs.value)">
+                every <input type="number" id='numTimerSecs' value='5' min='1' max='60'> seconds
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" id='btnRefreshNow' value="Refresh Now" onclick="RefreshTable()"></td>
+        </tr>
+        <tr>
+            <td>Filter:</td>
+            <td><input type="text" id='txtFilter'></td>
+        </tr>
+        <tr>
+            <td>Last Id:</td>
+            <td><input type="number" id='txtId'></td>
+        </tr>
+    </table>
+
+    <table id='tblStatuses' class="data-tbl" border='1'>
         <tr>
             <th>Source</th>
             <th>Message</th>

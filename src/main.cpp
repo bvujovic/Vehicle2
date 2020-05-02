@@ -4,6 +4,7 @@
 #include <Statuses.h>
 #include <VTests.h>
 #include <Sensors.h>
+#include <ItsTime.h>
 
 #include "MotorController.h"
 MotorController motors;
@@ -14,30 +15,24 @@ ESP8266WebServer server(80);
 #include <ArduinoOTA.h>
 bool isOtaOn = false; // da li je OTA update u toku
 
-// Akcija vozila (act)
+// Akcija vozila: /act?x=0&y=0.1&t=1500&f=0
 void ActHandler()
 {
-    // /act?x=0&y=0.1&t=1500&f=0
     String x = server.arg("x");
     String y = server.arg("y");
     String t = server.arg("t");
     String f = server.arg("f");
     MotCmd *cmd = new MotCmd(x.toFloat(), y.toFloat(), t.toInt(), (MotCmdFlags)f.toInt());
     motors.AddCmd(cmd);
-    //B Statuses::Add(x + "\t" + y);
     Statuses::Add(new Status(x + ", " + y + ", " + t, "user"));
 
     server.send(200, "text/plain", "OK");
 }
 
-// Statusi sistema (statuses)
+// Statusi sistema: /statuses?idLimit=123
 void StatusesHandler()
 {
-    // /statuses?idLimit=123
     String idLimit = server.arg("idLimit");
-    //B
-    // Statuses::Add(new Status("start", "main"));
-    // Statuses::Add(new Status("second"));
     server.send(200, "text/x-csv", Statuses::GetNewStatusesText(idLimit.toInt()));
 }
 
@@ -61,25 +56,12 @@ void WiFiOn()
     server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
     server.begin();
     Serial.println("WiFi ON");
-    UtilsESP::PrintBoardStatus();
 }
-
-//* Rad sa signalom sa motor speed encoder-a
-const int pinInt1 = D4;
-int cnt1 = 0;
-ICACHE_RAM_ATTR void handleInt1()
-{
-    // tprintln("1: ", cnt1++);
-    cnt1++;
-}
-// kôd za setup()
-//     pinMode(pinInt1, INPUT_PULLUP);
-//     attachInterrupt(digitalPinToInterrupt(pinInt1), handleInt1, FALLING);
 
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, true);
+    digitalWrite(LED_BUILTIN, false);
     Serial.begin(115200);
     Serial.println();
     SPIFFS.begin();
@@ -90,13 +72,13 @@ void setup()
     // VTests::SetMotors(&motors);
     // VTests::BalanceMotors(0.2);
 
-    pinMode(pinInt1, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(pinInt1), handleInt1, FALLING);
+    Sensors::Setup();
 
     WiFiOn();
+    digitalWrite(LED_BUILTIN, true);
 }
 
-ulong secs = 0;
+//B ItsTime timMemory(30000);
 
 void loop()
 {
@@ -110,11 +92,10 @@ void loop()
     }
     server.handleClient();
 
-    if (Sensors::ms / 1000 > secs)
-    {
-        Statuses::Add(String("cnt 1: ") + cnt1, "motor hall sensor");
-        secs++;
-    }
+    Sensors::Refresh();
+    //B
+    // if (timMemory.IsTick())
+    //     Statuses::Add(String(UtilsESP::GetFreeMemKB()), "free mem");
 
     // VTests::Refresh();
     motors.Refresh();
