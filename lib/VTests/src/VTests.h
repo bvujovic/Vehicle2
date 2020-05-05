@@ -15,11 +15,14 @@ private:
     // Vrsta tekuceg testa;
     static VTestsEnum testKind;
 
+    static uint cntR, cntL;
+    static void AddStatus(ulong msDur);    
+
 public:
     // Preuzimanje reference na MotorController objekat. Poziv ove metode bi trebao biti u setup()-u.
     static void SetMotors(MotorController *m) { motors = m; }
-    // Balansiranje motora ...
-    static void BalanceMotors(float cmdY);
+    // Pokretanje testa.
+    static void StartTest(VTestsEnum testKind, uint y);
     // Redovna provera testiranih parametara. Poziv ove metode bi trebao biti u loop()-u.
-    static void Refresh();
+    static void Refresh(); 
 };

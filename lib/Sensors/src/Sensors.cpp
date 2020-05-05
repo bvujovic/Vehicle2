@@ -3,15 +3,14 @@
 
 ulong Sensors::ms;
 
-int Sensors::pinIntR = D4;
-int Sensors::pinIntL = D3;
+uint Sensors::pinIntR = D4;
+uint Sensors::pinIntL = D3;
 
-int Sensors::cntR = 0;
-int Sensors::cntL = 0;
-int Sensors::cntRprev = 0;
-int Sensors::cntLprev = 0;
-//B ulong Sensors::secs = 0;
-ItsTime Sensors::timStatus(1000);
+uint Sensors::cntR = 0;
+uint Sensors::cntL = 0;
+uint Sensors::cntRprev = 0;
+uint Sensors::cntLprev = 0;
+ItsTime Sensors::timStatus(1000, false);
 
 void Sensors::Setup()
 {
@@ -23,19 +22,17 @@ void Sensors::Setup()
 
 void Sensors::Refresh()
 {
-    //B if (ms / 1000 > secs)
     if (timStatus.IsTick())
     {
         if (cntR != cntRprev)
         {
-            Statuses::Add(String("cnt R: ") + cntR, "motor hall sensor");
+            Statuses::Add(String(cntR), "R motor encoder");
             cntRprev = cntR;
         }
         if (cntL != cntLprev)
         {
-            Statuses::Add(String("cnt L: ") + cntL, "motor hall sensor");
+            Statuses::Add(String(cntL), "L motor encoder");
             cntLprev = cntL;
         }
-        //B secs++;
     }
 }

@@ -5,6 +5,8 @@ enum VTestsEnum
 {
     // Nema testiranja
     None,
-    BalanceMotorsFwd,
-    BalanceMotorsBck,
+    BalanceMotorsMinSpeedFwd,
+    BalanceMotorsMinSpeedBck,
+    BalanceMotorsMaxSpeedFwd,
+    BalanceMotorsMaxSpeedBck,
 };

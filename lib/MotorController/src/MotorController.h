@@ -25,11 +25,12 @@ private:
     MotCmd *currCmd; // komanda u izvrsavanju
     void StartNextCmd();
     void ClearCommands();
-    void ApplyPWM(PWMs pwm);
 
 public:
     MotorController();
 
+    // Direktna kontrola motora slanjem PWM nivoa 
+    void ApplyPWM(PWMs pwm);
     void AddCmd(MotCmd *cmd);
     void Refresh();
     int GetCommandsCount() { return commands.size(); }

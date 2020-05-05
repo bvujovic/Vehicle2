@@ -4,20 +4,34 @@
 
 MotorController *VTests::motors;
 ulong VTests::msTestStart;
-VTestsEnum VTests::testKind = VTestsEnum::BalanceMotorsFwd;
+VTestsEnum VTests::testKind = VTestsEnum::None;
+uint VTests::cntR;
+uint VTests::cntL;
 
-void VTests::BalanceMotors(float cmdY)
+void VTests::StartTest(VTestsEnum testKind, uint y)
 {
-    if (motors->GetCommandsCount() > 0)
+    VTests::testKind = testKind;
+    if (testKind == VTestsEnum::BalanceMotorsMinSpeedFwd)
     {
-        Statuses::Add("Motors cmd collection not empty", "VTests/BalanceMotors");
-        return;
-    }
+        PWMs pwmBurst(0.8 * PWMRANGE, 0, 0.8 * PWMRANGE, 0);
+        motors->ApplyPWM(pwmBurst);
+        delay(5);
 
-    MotCmd *cmd = new MotCmd(0, cmdY, 1000);
-    motors->AddCmd(cmd);
-    msTestStart = millis();
-    testKind = VTestsEnum::BalanceMotorsFwd;
+        PWMs pwm(y, 0, y, 0);
+        motors->ApplyPWM(pwm);
+
+        msTestStart = Sensors::ms;
+        cntR = cntL = 0;
+        AddStatus(0);
+    }
+}
+
+void VTests::AddStatus(ulong msDur)
+{
+    Statuses::Add(new Status(String("cntR: ") + (Sensors::GetEncoderCntR() - cntR), "VTests", msDur));
+    cntR = Sensors::GetEncoderCntR();
+    Statuses::Add(new Status(String("cntL: ") + (Sensors::GetEncoderCntL() - cntL), "VTests", msDur));
+    cntL = Sensors::GetEncoderCntL();
 }
 
 void VTests::Refresh()
@@ -26,8 +40,13 @@ void VTests::Refresh()
         return;
 
     ulong msDur = Sensors::ms - msTestStart;
-    if (msDur > 2000)
+    if (msDur > 2000) // zaustavljanje testa
+    {
+        Statuses::Add("Test stopped", "VTests");
         testKind = VTestsEnum::None;
-    if (msDur % 250 < 10)
-        Statuses::Add(String("test: ") + testKind + ", ms dur: " + msDur, "VTests/Refresh");
+        PWMs pwm;
+        motors->ApplyPWM(pwm);
+    }
+    if (msDur % 250 < 10) // zapisivanje medjurezultata
+        AddStatus(msDur);
 }

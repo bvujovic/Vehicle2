@@ -7,10 +7,10 @@
 class Sensors
 {
 private:
-    static int pinIntR;
-    static int pinIntL;
-    static int cntR, cntRprev;
-    static int cntL, cntLprev;
+    static uint pinIntR;
+    static uint pinIntL;
+    static uint cntR, cntRprev;
+    static uint cntL, cntLprev;
     //B static ulong secs;
     static ItsTime timStatus;
 
@@ -21,7 +21,9 @@ public:
     // Tekuce vreme u milisekundama.
     static ulong ms;
 
+    static uint GetEncoderCntR() { return cntR; }
+    static uint GetEncoderCntL() { return cntL; }
+
     static void Setup();
     static void Refresh();
-
 };

@@ -29,6 +29,15 @@ void ActHandler()
     server.send(200, "text/plain", "OK");
 }
 
+// VTests - testiranje motora (min/max brzine, balans...): /vtests?k=1&y=300
+void VTestsHandler()
+{
+    String k = server.arg("k"); // vrsta testa (VTestsEnum)
+    String y = server.arg("y"); // brzina motora
+    VTests::StartTest((VTestsEnum)k.toInt(), (uint)y.toInt());
+    server.send(200, "text/plain", "OK");
+}
+
 // Statusi sistema: /statuses?idLimit=123
 void StatusesHandler()
 {
@@ -48,7 +57,7 @@ void WiFiOn()
     server.on("/inc/script.js", []() { HandleDataFile(server, "/inc/script.js", "text/javascript"); });
     server.on("/inc/style.css", []() { HandleDataFile(server, "/inc/style.css", "text/css"); });
     server.on("/act", ActHandler);
-    //* server.on("/tests", VTestsHandler);
+    server.on("/vtests", VTestsHandler);
     server.on("/statuses", StatusesHandler);
     server.on("/reps/", []() { HandleDataFile(server, "/reps/index.html", "text/html"); });
     server.on("/reps/statuses.html", []() { HandleDataFile(server, "/reps/statuses.html", "text/html"); });
@@ -68,11 +77,8 @@ void setup()
 
     //* testiranje cuvanja/citanja SPIFFS podataka
 
-    //* testiranje VTest klase
-    // VTests::SetMotors(&motors);
-    // VTests::BalanceMotors(0.2);
-
     Sensors::Setup();
+    VTests::SetMotors(&motors);
 
     WiFiOn();
     digitalWrite(LED_BUILTIN, true);
@@ -83,7 +89,6 @@ void setup()
 void loop()
 {
     delay(10);
-    Sensors::ms = millis();
 
     if (isOtaOn)
     {
@@ -91,12 +96,12 @@ void loop()
         return;
     }
     server.handleClient();
-
-    Sensors::Refresh();
     //B
     // if (timMemory.IsTick())
     //     Statuses::Add(String(UtilsESP::GetFreeMemKB()), "free mem");
 
-    // VTests::Refresh();
+    Sensors::ms = millis();
+    Sensors::Refresh();
+    VTests::Refresh();
     motors.Refresh();
 }

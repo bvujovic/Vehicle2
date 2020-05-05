@@ -17,38 +17,44 @@
         <a href="/">Home</a>
         <a href="/reps/">Reports</a>
     </p>
-    <table class="head-tbl">
+    <table id='frame'>
         <tr>
-            <td><label for="chkAutoRefresh">Auto Refresh:</label></td>
             <td>
-                <input type="checkbox" id='chkAutoRefresh'
-                    onchange="ChkAutoRefreshChange(this.checked, numTimerSecs.value)">
-                every <input type="number" id='numTimerSecs' value='5' min='1' max='60'> seconds
+                <table class="head-tbl">
+                    <tr>
+                        <td><label for="chkAutoRefresh">Auto Refresh:</label></td>
+                        <td>
+                            <input type="checkbox" id='chkAutoRefresh' checked='true'
+                                onchange="ChkAutoRefreshChange(this.checked, numTimerSecs.value)">
+                            every <input type="number" id='numTimerSecs' value='5' min='1' max='60'> seconds
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="button" id='btnRefreshNow' value="Refresh Now" onclick="RefreshTable()"></td>
+                    </tr>
+                    <tr>
+                        <td>Filter:</td>
+                        <td><input type="text" id='txtFilter'></td>
+                    </tr>
+                    <tr>
+                        <td>Last Id:</td>
+                        <td><input type="number" id='txtId'></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table id='tblStatuses' class="data-tbl" border='1'>
+                    <tr>
+                        <th>Source</th>
+                        <th>Message</th>
+                        <th>Time</th>
+                        <th>Id</th>
+                    </tr>
+                </table>
             </td>
         </tr>
-        <tr>
-            <td></td>
-            <td><input type="button" id='btnRefreshNow' value="Refresh Now" onclick="RefreshTable()"></td>
-        </tr>
-        <tr>
-            <td>Filter:</td>
-            <td><input type="text" id='txtFilter'></td>
-        </tr>
-        <tr>
-            <td>Last Id:</td>
-            <td><input type="number" id='txtId'></td>
-        </tr>
     </table>
-
-    <table id='tblStatuses' class="data-tbl" border='1'>
-        <tr>
-            <th>Source</th>
-            <th>Message</th>
-            <th>Time</th>
-            <th>Id</th>
-        </tr>
-    </table>
-
 </body>
 
 </html>

@@ -3,7 +3,7 @@
 
 bool ItsTime::IsTick()
 {
-    if (Sensors::ms / msInterval > cnt)
+    if (enabled && Sensors::ms / msInterval > cnt)
     {
         cnt++;
         return true;
