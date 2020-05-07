@@ -3,8 +3,8 @@
 
 ulong Sensors::ms;
 
-uint Sensors::pinIntR = D4;
-uint Sensors::pinIntL = D3;
+uint Sensors::pinIntR = D2;
+uint Sensors::pinIntL = D1;
 
 uint Sensors::cntR = 0;
 uint Sensors::cntL = 0;

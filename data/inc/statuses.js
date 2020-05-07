@@ -10,6 +10,7 @@ var id = 0;
 var fetchingData = false;
 
 function RefreshTable() {
+    docel('btnRefreshNow').style.backgroundColor = 'red';
     if (TEST) {
         const resp = `src\tmsg1\t1500\t` + (id + 1) + `\nsrc\tmsg2\t1501\t` + (id + 2);
         id += 2;
@@ -36,6 +37,7 @@ function ParseResp(resp) {
         if (line.length != 0)
             AddTableRow(line.split(sepData));
     }
+    docel('btnRefreshNow').style.backgroundColor = 'black';
 }
 
 function AddTableRow(status) {

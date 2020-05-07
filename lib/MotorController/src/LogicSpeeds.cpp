@@ -1,7 +1,7 @@
 #include <LogicSpeeds.h>
 
-const float LogicSpeeds::LIMIT_LOW_SPEED = 0.125;
-const float LogicSpeeds::INIT_BURST_SPEED = 0.8;
+const float LogicSpeeds::LIMIT_LOW_SPEED = 0.51;
+const float LogicSpeeds::INIT_BURST_SPEED = 1;
 
 bool LogicSpeeds::HasLowSpeed()
 {
