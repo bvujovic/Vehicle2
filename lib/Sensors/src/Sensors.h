@@ -26,4 +26,5 @@ public:
 
     static void Setup();
     static void Refresh();
+    static void TimStatusStart(uint msInterval = 0);
 };

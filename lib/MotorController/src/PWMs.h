@@ -13,7 +13,6 @@ private:
     }
 
 public:
-    //todo odluciti sta tacno sadrze ova polja: pwm vrednosti 0-pwmrange (short) ili su to koeficijenti 0-1 (float)
     short r1, r2; // PWM vrednosti za desni motor
     short l1, l2; // PWM vrednosti za levi motor
 

@@ -22,6 +22,7 @@ void ActHandler()
     String y = server.arg("y");
     String t = server.arg("t");
     String f = server.arg("f");
+    Sensors::TimStatusStart(250);
     MotCmd *cmd = new MotCmd(x.toFloat(), y.toFloat(), t.toInt(), (MotCmdFlags)f.toInt());
     motors.AddCmd(cmd);
     Statuses::Add(new Status(x + ", " + y + ", " + t, "user"));
@@ -59,12 +60,24 @@ void WiFiOn()
     server.on("/act", ActHandler);
     server.on("/vtests", VTestsHandler);
     server.on("/statuses", StatusesHandler);
+    server.on("/act.html", []() { HandleDataFile(server, "/act.html", "text/html"); });
     server.on("/reps/", []() { HandleDataFile(server, "/reps/index.html", "text/html"); });
     server.on("/reps/statuses.html", []() { HandleDataFile(server, "/reps/statuses.html", "text/html"); });
     server.on("/inc/statuses.js", []() { HandleDataFile(server, "/inc/statuses.js", "text/javascript"); });
     server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
     server.begin();
     Serial.println("WiFi ON");
+}
+
+// Diskonektovanje sa WiFi-a i odlazak na spavanje. Klik Reset dugme za budjenje.
+void Sleep()
+{
+    server.stop();
+    WiFi.disconnect();
+    WiFi.mode(WIFI_OFF);
+    WiFi.forceSleepBegin();
+    delay(100);
+    ESP.deepSleep(0);
 }
 
 void setup()
@@ -74,8 +87,6 @@ void setup()
     Serial.begin(115200);
     Serial.println();
     SPIFFS.begin();
-
-    //* testiranje cuvanja/citanja SPIFFS podataka
 
     Sensors::Setup();
     VTests::SetMotors(&motors);

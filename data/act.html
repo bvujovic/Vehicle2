@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle 2 - Act</title>
+    <link rel="icon" href="inc/vehicle.png" type="image/png" />
+    <link href="inc/style.css" rel="stylesheet" type="text/css">
+    <script>
+        function docel(id) { return document.getElementById(id); }
+
+        function Go() {
+            docel('btnGo').style.backgroundColor = 'red';
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200)
+                    docel('btnGo').style.backgroundColor = 'black';
+            };
+            // /act?x=0.33&y=-0.5&t=1500&f=0
+            var url = '/act?x=' + docel('numX').value + '&y=' + docel('numY').value
+                + '&t=' + docel('numT').value + '&f=' + docel('numF').value;
+            xhttp.open('GET', url, true); xhttp.send();
+        }
+    </script>
+</head>
+
+<body onload='RefreshTable();'>
+    <h1 id='h1'>Vehicle 2 - Act</h1>
+
+    <p>
+        <a href="/">Home</a>
+        <a href="reps/statuses.html">Statuses</a>
+    </p>
+    <table class="head-tbl">
+        <tr>
+            <td>X</td>
+            <td><input type="number" id='numX' value='0' min='-1' max='1' step="0.1" readonly ></td>
+        </tr>
+        <tr>
+            <td>Y</td>
+            <td><input type="number" id='numY' value='0.2' min='0' max='1' step="0.1"></td>
+        </tr>
+        <tr>
+            <td>T</td>
+            <td><input type="number" id='numT' value='1000' min='0' max='2000' step="250"></td>
+        </tr>
+        <tr>
+            <td>F</td>
+            <td><input type="number" id='numF' value='0' min='0' max='255' step="1"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" id='btnGo' value="Go" onclick="Go()" style="width: 50px;"></td>
+        </tr>
+    </table>
+</body>
+
+</html>
