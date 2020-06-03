@@ -5,6 +5,10 @@
 #include <VTests.h>
 #include <Sensors.h>
 #include <ItsTime.h>
+#include <SpiffsUtils.h>
+
+#include <EasyINI.h>
+EasyINI ei("/config.ini");
 
 #include "MotorController.h"
 MotorController motors;
@@ -46,6 +50,37 @@ void StatusesHandler()
     server.send(200, "text/x-csv", Statuses::GetNewStatusesText(idLimit.toInt()));
 }
 
+void ReadConfigIni()
+{
+    ei.open(FMOD_READ);
+    MotCtrlCore::SetLeftCoef(ei.getFloat("MotCtrlCoreLeftCoef"));
+    ei.close();
+}
+
+String textFileName;
+
+void LoadTextFileHandler()
+{
+    textFileName = server.arg("name");
+    File f = SPIFFS.open(textFileName, "r");
+    if (f)
+    {
+        server.streamFile(f, "text/css");
+        f.close();
+    }
+    else
+        Serial.println(textFileName + " - error reading file.");
+}
+
+void SaveTextFileHandler()
+{
+    SpiffsUtils::WriteFile(textFileName, server.arg("plain"));
+    server.send(200, "text/plain", "");
+
+    if (textFileName == ei.getFileName())
+        ReadConfigIni();
+}
+
 // Konektovanje na WiFi, uzimanje tacnog vremena, postavljanje IP adrese i startovanje veb servera.
 void WiFiOn()
 {
@@ -57,7 +92,10 @@ void WiFiOn()
     server.on("/inc/vehicle.png", []() { HandleDataFile(server, "/inc/vehicle.png", "image/png"); });
     server.on("/inc/script.js", []() { HandleDataFile(server, "/inc/script.js", "text/javascript"); });
     server.on("/inc/style.css", []() { HandleDataFile(server, "/inc/style.css", "text/css"); });
+    server.on("/text_editor.html", []() { HandleDataFile(server, "/text_editor.html", "text/html"); });
     server.on("/act", ActHandler);
+    server.on("/loadTextFile", LoadTextFileHandler);
+    server.on("/saveTextFile", SaveTextFileHandler);
     server.on("/vtests", VTestsHandler);
     server.on("/statuses", StatusesHandler);
     server.on("/act.html", []() { HandleDataFile(server, "/act.html", "text/html"); });
@@ -88,6 +126,7 @@ void setup()
     Serial.println();
     SPIFFS.begin();
 
+    ReadConfigIni();
     Sensors::Setup();
     VTests::SetMotors(&motors);
 

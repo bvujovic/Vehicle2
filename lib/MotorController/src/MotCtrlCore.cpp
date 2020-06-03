@@ -1,6 +1,8 @@
 #include "MotCtrlCore.h"
 #include <Statuses.h>
 
+float MotCtrlCore::leftCoef;
+
 // request (MotCmd) -> logic speed
 LogicSpeeds MotCtrlCore::MotCmdToLogicSpeed(MotCmd &cmd)
 {
@@ -47,7 +49,7 @@ PWMs MotCtrlCore::LogicSpeedToPWM(LogicSpeeds ls)
     pwm.l1 = ls.l == 0 ? 0 : (speedMax - speedMin) * _abs(ls.l) + speedMin;
     pwm.l2 = 0;
 
-    pwm.l1 *= 1.25;
+    pwm.l1 *= leftCoef;
 
     if (ls.r < 0)
         pwm.ReverseR();

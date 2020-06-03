@@ -9,6 +9,7 @@
         "cmath": "cpp",
         "cstdarg": "cpp",
         "functional": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "fstream": "cpp"
     }
 }
