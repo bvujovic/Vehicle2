@@ -26,12 +26,12 @@ void Sensors::Refresh()
     {
         if (cntR != cntRprev)
         {
-            Statuses::Add(String(cntR - cntRprev), "R motor encoder");
+            // Statuses::Add(String(cntR - cntRprev), "R motor encoder");
             cntRprev = cntR;
         }
         if (cntL != cntLprev)
         {
-            Statuses::Add(String(cntL - cntLprev), "L motor encoder");
+            // Statuses::Add(String(cntL - cntLprev), "L motor encoder");
             cntLprev = cntL;
         }
     }

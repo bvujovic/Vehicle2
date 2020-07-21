@@ -18,3 +18,15 @@ function otaUpdate() {
     x.send(null);
 }
 
+function wheelON() {
+    url = 'radioON';
+    var x = new XMLHttpRequest();
+    x.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            alert('Steering wheel is turned ON.');
+        }
+    };
+    x.open('GET', url, true);
+    x.send(null);
+}
+

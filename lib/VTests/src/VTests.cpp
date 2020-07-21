@@ -4,7 +4,7 @@
 
 MotorController *VTests::motors;
 ulong VTests::msTestStart;
-VTestsEnum VTests::testKind = VTestsEnum::None;
+VTestsEnum VTests::testKind = VTestsEnum::NoTests;
 uint VTests::cntR;
 uint VTests::cntL;
 
@@ -36,14 +36,14 @@ void VTests::AddStatus(ulong msDur)
 
 void VTests::Refresh()
 {
-    if (testKind == VTestsEnum::None)
+    if (testKind == VTestsEnum::NoTests)
         return;
 
     ulong msDur = Sensors::ms - msTestStart;
     if (msDur > 2000) // zaustavljanje testa
     {
         Statuses::Add("Test stopped", "VTests");
-        testKind = VTestsEnum::None;
+        testKind = VTestsEnum::NoTests;
         PWMs pwm;
         motors->ApplyPWM(pwm);
     }

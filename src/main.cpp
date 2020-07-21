@@ -19,6 +19,12 @@ ESP8266WebServer server(80);
 #include <ArduinoOTA.h>
 bool isOtaOn = false; // da li je OTA update u toku
 
+#include "RadioRecv.h"
+RadioRecv radio;
+
+const int pinLed = LED_BUILTIN;
+void ledON(bool on) { digitalWrite(pinLed, !on); }
+
 // Akcija vozila: /act?x=0&y=0.1&t=1500&f=0
 void ActHandler()
 {
@@ -103,6 +109,7 @@ void WiFiOn()
     server.on("/reps/statuses.html", []() { HandleDataFile(server, "/reps/statuses.html", "text/html"); });
     server.on("/inc/statuses.js", []() { HandleDataFile(server, "/inc/statuses.js", "text/javascript"); });
     server.on("/otaUpdate", []() { server.send(200, "text/plain", ""); isOtaOn = true; ArduinoOTA.begin(); });
+    server.on("/radioON", []() { server.send(200, "text/plain", ""); radio.resume(); });
     server.begin();
     Serial.println("WiFi ON");
 }
@@ -120,8 +127,8 @@ void Sleep()
 
 void setup()
 {
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, false);
+    pinMode(pinLed, OUTPUT);
+    ledON(true);
     Serial.begin(115200);
     Serial.println();
     SPIFFS.begin();
@@ -131,7 +138,9 @@ void setup()
     VTests::SetMotors(&motors);
 
     WiFiOn();
-    digitalWrite(LED_BUILTIN, true);
+    radio.init();
+    radio.end();
+    ledON(false);
 }
 
 //B ItsTime timMemory(30000);
@@ -145,7 +154,21 @@ void loop()
         ArduinoOTA.handle();
         return;
     }
-    server.handleClient();
+    if (radio.isON())
+    {
+        RadioRecvCode code = radio.refresh();
+        if (code == WheelPos)
+        {
+            MotCmd *cmd = radio.getMotCmd();
+            if (cmd != NULL)
+            {
+                motors.AddCmd(cmd);
+                Statuses::Add(new Status(String(cmd->GetX()) + ", " + cmd->GetY(), "radio"));
+            }
+        }
+    }
+    else
+        server.handleClient();
     //B
     // if (timMemory.IsTick())
     //     Statuses::Add(String(UtilsESP::GetFreeMemKB()), "free mem");

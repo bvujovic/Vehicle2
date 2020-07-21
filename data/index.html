@@ -7,6 +7,9 @@
     <link rel="icon" href="inc/vehicle.png" type="image/png" />
     <link href="inc/style.css" rel="stylesheet" type="text/css">
     <script onload='' src="inc/script.js" type="text/javascript" language="JavaScript"></script>
+    <style>
+        input[type=button] { width: 100px; }
+    </style>
     <title>Vehicle 2</title>
 </head>
 
@@ -22,7 +25,9 @@
 
         <a href="reps/">Reports</a>
 
-        <input type="button" id='btnOTA' value="OTA Update" onclick="otaUpdate()">
+        <input type="button" id='btnWheelON' value="Wheel ON" onclick="wheelON()">
+        <br />
+        <input type="button" id='btnOTA' value="OTA Update" style="font-weight: bold;" onclick="otaUpdate()">
     </form>
 
 </body>

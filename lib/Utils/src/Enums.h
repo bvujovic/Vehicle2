@@ -12,3 +12,15 @@ enum MotCmdFlags
     //? StandBy
     //? Cancelled // moze da bude korisno za nekakve izvestaje da bi se znalo da li su neke komande cancel-ovane
 };
+
+// Kôd koji vraca metod RadioRecv::refresh().
+enum RadioRecvCode
+{
+    None,
+    // Pitch i roll volana na osnovu kojih se pravi komanda za motor.
+    WheelPos = 101,
+    // Pauza u komunikaciji izmedju volana i vozila.
+    Pause,
+    // Kraj upravljanja vozila volanom.
+    End,
+};
