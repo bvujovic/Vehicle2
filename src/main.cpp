@@ -60,6 +60,9 @@ void ReadConfigIni()
 {
     ei.open(FMOD_READ);
     MotCtrlCore::SetLeftCoef(ei.getFloat("MotCtrlCoreLeftCoef"));
+    RadioRecv::SetStWheelMinPitch(ei.getInt("StWheelMinPitch", 5));
+    RadioRecv::SetStWheelMaxAngle(ei.getInt("StWheelMaxAngle", 45));
+    RadioRecv::SetStWheelPitchInvCoef(ei.getFloat("StWheelPitchInvCoef", 100));
     ei.close();
 }
 
@@ -157,7 +160,7 @@ void loop()
     if (radio.isON())
     {
         RadioRecvCode code = radio.refresh();
-        if (code == WheelPos)
+        if (code == DrivingNormal || code == DrivingSpin)
         {
             MotCmd *cmd = radio.getMotCmd();
             if (cmd != NULL)

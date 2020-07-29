@@ -18,7 +18,9 @@ enum RadioRecvCode
 {
     None,
     // Pitch i roll volana na osnovu kojih se pravi komanda za motor.
-    WheelPos = 101,
+    DrivingNormal = 101,
+    // Obrtanje vozila u mestu.
+    DrivingSpin,
     // Pauza u komunikaciji izmedju volana i vozila.
     Pause,
     // Kraj upravljanja vozila volanom.
